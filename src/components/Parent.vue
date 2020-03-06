@@ -181,19 +181,5 @@ export default {
 }
 </script>
 <style lang="less">
-  #table {
-    display: flex;
-    justify-content:center;
-    width: 400px;
-    flex-direction: column;
-    text-align: center;
-    margin:0 auto;
-  }
-  .el-input__inner {
-    width: 260px;
-    border-top-width: 0px;
-    border-left-width: 0px;
-    border-right-width: 0px;
-    border-bottom-width: 0px;
-}
+
 </style>
