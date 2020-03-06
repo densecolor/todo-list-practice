@@ -4,7 +4,7 @@
       ref="inputb"
       v-model.lazy="input"
       placeholder="What needs to be done?"
-      @change="onChange"
+      @keyup.enter.native="sendMsg"
       id="el-inputChild"
       >
     </el-input>
@@ -13,6 +13,7 @@
 </template>
 
 <script>
+import uuid from 'js-shortid'
 export default {
   name: 'Child',
   data: function () {
@@ -37,7 +38,12 @@ export default {
     },
     sendMsg (event) {
       if (this.input !== '') {
-        this.inputs.push({ item: this.input, status: 0 })
+        this.inputs.push(
+          {
+            item: this.input,
+            status: 0,
+            id: uuid.gen()
+          })
       } else {
       }
       this.$emit('getInfo', this.inputs)

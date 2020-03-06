@@ -36,7 +36,9 @@
           type="text"
           v-if="scope.row._isEdit"
           v-model="scope.row.item"
-          >
+          @keyup.enter.native="e => saveItem(scope.row)"
+          @blur="e => saveItem(scope.row)"
+        >
           <el-button type="text" slot="suffix" class="el-icon-check" @click="saveItem(scope.row)"></el-button>
         </el-input>
         {{ scope.row.item }}</template>
@@ -67,7 +69,6 @@
 
 <script>
 import Child from './Child'
-
 export default {
   name: 'Parent',
   components: {
@@ -129,11 +130,18 @@ export default {
       this.$set(row, '_isEdit', true)
     },
     handleDelete (index, row) {
-      this.tableData.splice(index, 1)
+      // 不能直接使用这里的index，因为这里的index对应的是table组件绑定的data，但是这里要删除的是整体数组中的元素
+      const uid = (element) => element.id === row.id
+      const index2 = this.tableData.findIndex(uid)
+      this.tableData.splice(index2, 1)
     },
-    handleSelectionChange (val, row) {
-      val.forEach(element => {
-        element.status = 1
+    handleSelectionChange (val) {
+      this.tableData.forEach(element => {
+        if (val.indexOf(element) >= 0) {
+          element.status = 1
+        } else {
+          element.status = 0
+        }
       })
     },
     handleDeleteMul () {
@@ -163,7 +171,10 @@ export default {
       let index = this.tableData.indexOf(row)
       return index
     },
+    // 向对象中添加一个响应式属性  布尔类型的_isEdit，默认是true
+    // 当双击事件发生时为true，用v-if绑定此变量用于控制input的显隐
     saveItem (row) {
+      console.log(row)
       this.$set(row, '_isEdit', false)
     }
   }
